@@ -1,5 +1,6 @@
 import { useState } from 'react'
-
+import logo from './logo.png'
+<img src={logo} alt="Manasys" className="logo" />
 export default function App() {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -24,28 +25,29 @@ export default function App() {
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '400px' }}>
-      <h2>Login – Manasys</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
-        />
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          required
-          style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
-        />
-        <button type="submit">Entrar</button>
-      </form>
-      {mensagem && <p>{mensagem}</p>}
+    <div className="login-container">
+      <div className="login-box">
+        <img src={logo} alt="Manasys" className="logo" />
+        <h2>Login – Manasys</h2>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            required
+          />
+          <button type="submit">Entrar</button>
+        </form>
+        {mensagem && <p className="mensagem">{mensagem}</p>}
+      </div>
     </div>
   )
 }

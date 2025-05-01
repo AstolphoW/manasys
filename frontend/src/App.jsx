@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import logo from './logo.png'
-<img src={logo} alt="Manasys" className="logo" />
+
 export default function App() {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [mensagem, setMensagem] = useState('')
+
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -18,10 +21,10 @@ export default function App() {
       })
 
       const data = await res.json()
+
       if (data.access_token) {
         localStorage.setItem('token', data.access_token)
-        setMensagem('Login feito com sucesso!')
-        // Aqui você pode redirecionar no futuro com: navigate('/dashboard')
+        navigate('/dashboard') // redireciona após login
       } else {
         setMensagem(data.message || 'Erro no login')
       }
@@ -57,3 +60,4 @@ export default function App() {
     </div>
   )
 }
+

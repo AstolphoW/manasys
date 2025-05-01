@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -30,7 +31,7 @@ def get_db():
     finally:
         db.close()
 
-# Modelo de entrada do login
+# Modelo de entrada do login/registro
 class LoginData(BaseModel):
     email: str
     senha: str
@@ -39,7 +40,7 @@ class LoginData(BaseModel):
 def read_root():
     return {"message": "API do Manasys rodando com sucesso"}
 
-# Endpoint de login com validação no banco
+# Login
 @app.post("/login")
 def login(data: LoginData, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.email == data.email).first()
@@ -49,3 +50,15 @@ def login(data: LoginData, db: Session = Depends(get_db)):
     expire = datetime.utcnow() + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
     token = jwt.encode({"sub": usuario.email, "exp": expire}, SECRET_KEY, algorithm=ALGORITHM)
     return {"access_token": token, "token_type": "bearer"}
+
+# Cadastro de usuário
+@app.post("/register")
+def register(data: LoginData, db: Session = Depends(get_db)):
+    usuario_existente = db.query(Usuario).filter(Usuario.email == data.email).first()
+    if usuario_existente:
+        raise HTTPException(status_code=400, detail="Usuário já existe")
+
+    novo = Usuario(email=data.email, senha=data.senha)
+    db.add(novo)
+    db.commit()
+    return {"message": "Usuário criado com sucesso"}

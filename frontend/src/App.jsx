@@ -18,7 +18,13 @@ export default function App() {
       })
 
       const data = await res.json()
-      setMensagem(data.message || 'Login feito com sucesso!')
+      if (data.access_token) {
+        localStorage.setItem('token', data.access_token)
+        setMensagem('Login feito com sucesso!')
+        // Aqui você pode redirecionar no futuro com: navigate('/dashboard')
+      } else {
+        setMensagem(data.message || 'Erro no login')
+      }
     } catch (error) {
       setMensagem('Erro ao conectar com o servidor')
     }
